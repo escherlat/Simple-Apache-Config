@@ -3,6 +3,7 @@ package SimpleTemplate::System::Debian;
 use strict;
 use warnings;
 
+use lib '/usr/local/cpanel';
 use Cpanel::FindBin;
 
 ##
@@ -16,12 +17,16 @@ sub update_config{
     if( $action eq 'add' ){
 	my $a2ensite = Cpanel::FindBin::findbin( 'a2ensite' );
 	if( $a2ensite ){
+	    # TODO Switch to Open3
 	    system( $a2ensite, $domain );
+	    system( '/etc/init.d/apache2', 'reload' );
 	}
     }
     elsif( $action eq 'remove' ){
 	my $a2dissite = Cpanel::FindBin::findbin( 'a2dissite' );
+	# TODO switch to Open3
 	system( $a2dissite, $domain );
+	system( '/etc/init.d/apache2', 'reload' );
     }
     else{
 	print "Unknown action: $action\n";
