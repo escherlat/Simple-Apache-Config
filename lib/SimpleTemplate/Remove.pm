@@ -3,12 +3,14 @@ package SimpleTemplate::Remove;
 use strict;
 use warnings;
 
+use base qw(SimpleTemplate);
+
 ##
 # This module is responsible for Removing a configuration
 
 sub new{
     my( $class ) = shift;
-    $class->SUPER::new( @_ );
+    return $class->SUPER::new( @_ );
 }
 
 sub update_config{
