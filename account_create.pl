@@ -1,23 +1,23 @@
 #!/usr/bin/perl
 
+BEGIN{
+    if( $< != 0 ){
+	print "This must run as root\n";
+	exit 1;
+    }
+}
+
 use strict;
 use warnings;
 use Data::Dumper;
 
 our $VERSION = 1;
 
-use lib '/usr/local/cpanel';
+use lib '/home/kpower/Projects/simple_apache_template/lib';
 
-use Template;
-use Cpanel::Config::userdata::Load;
+use SimpleTemplate::Add;
+use SimpleTemplate::Remove;
 
-my ( $user, $domain, $template_dir  );
+my $st = SimpleTemplate::Add->new( 'kpowerme', 'kpower.me', 'parked' );
 
-my $userdata->{'vhost'} = Cpanel::Config::userdata::Load::load_userdata( $user, $domain );
-
-my $template = Template->new(
-    INCLUDE_PATH => $template_dir,
-);
-
-$template->process( 'simple_template.tpl', $userdata ) || print Dumper $template->error();
-
+$st->update_config();
