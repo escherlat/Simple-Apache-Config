@@ -39,7 +39,7 @@ sub new{
     $self->{'domain_type'} = $domain_type;
 
     # TODO define place to put the config file
-    tie my %config, 'Config::IniFiles', (-file => 'config/simple_template.conf') ;
+    tie my %config, 'Config::IniFiles', (-file => '/etc/simpletemplate/simple_template.conf') ;
     $self->{'config'} = \%config;
 
     $self->{'vhost'} = Cpanel::Config::userdata::Load::load_userdata( $user, $domain );
