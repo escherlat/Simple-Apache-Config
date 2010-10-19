@@ -19,7 +19,7 @@ sub get_actual_domain{
 
     my $domain_listing = Cpanel::Config::userdata::Load::load_userdata( $user, 'main' );
     if( exists $domain_listing->{'addon_domains'} ){
-	my %addons = %{ $domain_list->{'addon_domains'} };
+	my %addons = %{ $domain_listing->{'addon_domains'} };
 	my %reversed_addons = reverse %addons;
 	if( exists $reversed_addons{ $sub_domain } ){
 	    return $reversed_addons{ $sub_domain };
