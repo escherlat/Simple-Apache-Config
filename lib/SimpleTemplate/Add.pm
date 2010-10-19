@@ -16,6 +16,18 @@ sub new{
 
 sub update_config{
     my ( $self ) = @_;
+
+    my %vhost;
+    $vhost{'vhost'} = $self->{'vhost'};
+    if( $self->{'domain_type'} eq 'addon' ){
+	eval {
+	    require SimpleTemplate::AddonDomain;
+	};
+	if( ! $@ ){
+	    my $addon_domain = SimpleTemplate::AddonDomain::get_actual_domain( $self->{'user'}, $self->{'domain'};
+	}
+    }
+    
     my $template = Template->new(
 	INCLUDE_PATH => $self->{'config'}->{'template_engine'}->{'template_directory'}.'/'. $self->{'config'}->{'template_engine'}->{'service_type'},
 	OUTPUT_PATH => $self->{'config'}->{'service_config'}->{'service_config_directory'},
@@ -26,8 +38,6 @@ sub update_config{
 
     if ( $self->{'config'}->{'service_config'}->{'config_style'} =~ m/split/i ){
 	# Write file
-	my %vhost;
-	$vhost{'vhost'} = $self->{'vhost'};
 	$template->process( 'simple_template.tpl', \%vhost, $self->{'domain'} ) || print $template->error();
     }
     else{
