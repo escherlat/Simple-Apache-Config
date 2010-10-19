@@ -24,7 +24,7 @@ sub update_config{
 	    require SimpleTemplate::AddonDomain;
 	};
 	if( ! $@ ){
-	    my $addon_domain = SimpleTemplate::AddonDomain::get_actual_domain( $self->{'user'}, $self->{'domain'};
+	    my $addon_domain = SimpleTemplate::AddonDomain::get_actual_domain( $self->{'user'}, $self->{'domain'} );
 	}
     }
     
