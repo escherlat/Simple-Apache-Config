@@ -1,0 +1,24 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use XML::Simple;
+
+use lib '/var/cpanel/perl';
+
+use SimpleTemplate::Remove;
+
+my $xml_in;
+while( <STDIN> ){
+       $xml_in .= $_;
+}
+
+if( $xml_in ){
+    my $input_params = XMLin( $xml_in );
+    if( exists $input_params->{'cpanelevent'}->{'errors'} && $input_params->{'cpanelevent'}->{'errors'} ){
+        # bail
+    }
+    else{
+        my $st = SimpleTemplate::Remove->new( $input_params->{'CPDATA'}->{'USER'}, $input_params->{'cpanelevent'}->{'params'}->{'subdomain'}, 'addon' );
+    }
+}
