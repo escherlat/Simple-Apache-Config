@@ -2,6 +2,7 @@ package SimpleTemplate::Add;
 
 use strict;
 use warnings;
+use Data::Dumper;
 
 use base qw(SimpleTemplate);
 
@@ -25,9 +26,15 @@ sub update_config{
 	};
 	if( ! $@ ){
 	    my $addon_domain = SimpleTemplate::AddonDomain::get_actual_domain( $self->{'user'}, $self->{'domain'} );
+	    if( $addon_domain ){
+		$vhost{'vhost'}{'servername'} = $addon_domain;
+		$vhost{'vhost'}{'serveralias'} = 'www.'.$addon_domain;
+	    }
 	}
     }
     
+    print Dumper \%vhost;
+    exit;
     my $template = Template->new(
 	INCLUDE_PATH => $self->{'config'}->{'template_engine'}->{'template_directory'}.'/'. $self->{'config'}->{'template_engine'}->{'service_type'},
 	OUTPUT_PATH => $self->{'config'}->{'service_config'}->{'service_config_directory'},
