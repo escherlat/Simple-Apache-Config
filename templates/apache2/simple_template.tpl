@@ -7,6 +7,7 @@ NameVirtualHost [% vhost.ip %]:80
     [%- FOREACH logstyle IN vhost.customlog %]
     CustomLog [% logstyle.target %] [% logstyle.format %]
     [%- END -%]
+    ErrorLog /usr/local/apache/domlogs/[% vhost.servername %]-error_log
     [% IF vhost.hascgi %]
     Options ExecCGI
     AddHandler cgi-script cgi plr
