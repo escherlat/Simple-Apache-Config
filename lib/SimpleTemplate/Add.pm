@@ -26,6 +26,7 @@ sub update_config{
 	if( ! $@ ){
 	    my $addon_domain = SimpleTemplate::AddonDomain::get_actual_domain( $self->{'user'}, $self->{'domain'} );
 	    if( $addon_domain ){
+		$self->{'domain'} = $addon_domain;
 		$vhost{'vhost'}{'servername'} = $addon_domain;
 		$vhost{'vhost'}{'serveralias'} = 'www.'.$addon_domain;
 		$vhost{'vhost'}{'serveradmin'} =~ s/$self->{'domain'}/$addon_domain/;
