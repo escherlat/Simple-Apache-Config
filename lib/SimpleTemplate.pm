@@ -16,9 +16,9 @@ use Cpanel::Config::userdata::Load;
 ##
 # @param user string name of user that owns domain
 # @param domain domain name being modified
-# @param domain_type string parked, addon, sub, primary
+# @param domain_type string parked, addon, sub, main
 # 
-# For type 'parked' the domain name will be the primary domain
+# For type 'parked' the domain name will be the main domain
 
 sub new{
     my ( $class, $user, $domain, $domain_type ) = @_;
@@ -36,6 +36,7 @@ sub new{
     my $self = ();
     $self->{'user'} = $user;
     $self->{'domain'} = $domain;
+    $self->{'domain_type'} = $domain_type;
 
     # TODO define place to put the config file
     tie my %config, 'Config::IniFiles', (-file => 'config/simple_template.conf') ;
