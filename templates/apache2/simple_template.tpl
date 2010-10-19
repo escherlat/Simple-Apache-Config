@@ -6,7 +6,7 @@ NameVirtualHost [% vhost.ip %]:80
     ServerAdmin [% vhost.serveradmin %]
     [%- FOREACH logstyle IN vhost.customlog %]
     CustomLog [% logstyle.target %] [% logstyle.format %]
-    [%- END -%]
+    [%- END %]
     ErrorLog /usr/local/apache/domlogs/[% vhost.servername %]-error_log
     [% IF vhost.hascgi %]
     Options ExecCGI
