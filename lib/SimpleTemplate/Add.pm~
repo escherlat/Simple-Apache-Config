@@ -5,8 +5,6 @@ use warnings;
 
 use base qw(SimpleTemplate);
 
-use Cpanel::Logger;
-
 our $VERSION = 1;
 
 ##
@@ -35,15 +33,7 @@ sub update_config{
 	    }
 	}
 	else{
-            Cpanel::Logger::logger(
-                {
-                    "message" => "Unable to load SimpleTemplate::AddonDomain: $@",
-                    "level" => "warn",
-                    "backtrace" => 0,
-                    "service" => "simpletemplate::add",
-                    "output" => 0,
-                }
-            );
+	    die "Unable to load SimpleTemplate::AddonDomain: $@\n";
 	}
     }
     
@@ -63,7 +53,6 @@ sub update_config{
 	# monolithic not implemented yet
     }
     $self->_post_update_processing( 'add' );
-    return 1;
 }
 
 1;
