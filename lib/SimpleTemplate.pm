@@ -46,9 +46,10 @@ sub new{
 }
 
 sub _load_userdata{
-    my ( $self ) = @_;
+    my ( $self, $domain ) = @_;
 
-    $self->{'vhost'} = Cpanel::Config::userdata::Load::load_userdata( $self->{'user'}, $self->{'domain'} );
+    $domain ||= $self->{'domain'};
+    $self->{'vhost'} = Cpanel::Config::userdata::Load::load_userdata( $self->{'user'}, $domain );
 
     if( ! keys %{ $self->{'vhost'} } ){
         Cpanel::Logger::logger(
