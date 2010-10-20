@@ -13,15 +13,14 @@ use Cpanel::Config::userdata::Load;
 #
 #
 
-sub get_actual_domain{
-    my ( $user, $sub_domain ) = @_;
+sub get_sub_domain{
+    my ( $user, $addon_domain ) = @_;
 
     my $domain_listing = Cpanel::Config::userdata::Load::load_userdata( $user, 'main' );
     if( exists $domain_listing->{'addon_domains'} ){
 	my %addons = %{ $domain_listing->{'addon_domains'} };
-	my %reversed_addons = reverse %addons;
-	if( exists $reversed_addons{ $sub_domain } ){
-	    return $reversed_addons{ $sub_domain };
+	if( exists $addons{ $addon_domain } ){
+	    return $addons{ $addon_domain };
 	}
     }
 }
