@@ -1,12 +1,19 @@
 #!/usr/bin/perl
 
+BEGIN{
+    unshift( @INC, qw( /var/cpanel/perl /usr/local/cpanel ) );
+}
+
 use strict;
 use warnings;
 use XML::Simple;
 
-use lib '/var/cpanel/perl';
+local $ENV{'CPANEL_LOGGER_FILE'} = 'simpletemplate.log';
 
+use Cpanel::Logger;
 use SimpleTemplate::Remove;
+
+my $logger = Cpanel::Logger->new();
 
 my $xml_in;
 while( <STDIN> ){
@@ -15,10 +22,42 @@ while( <STDIN> ){
 
 if( $xml_in ){
     my $input_params = XMLin( $xml_in );
-    if( exists $input_params->{'cpanelevent'}->{'errors'} && $input_params->{'cpanelevent'}->{'errors'} ){
-        # bail
+
+    if( exists $input_params->{'cpanelevent'}->{'errors'} && keys %{ $input_params->{'cpanelevent'}->{'errors'} } ){
+        $logger->logger( {
+            'message' => 'Errors exist in cpanelevent, not removing vhost configuration',
+            'level' => 'warn',
+            'backtrace' => 1,
+            'service' => 'delsubdomain',
+            'output' => 0,
+            }
+        );
     }
     else{
-        my $st = SimpleTemplate::Remove->new( $input_params->{'CPDATA'}->{'USER'}, $input_params->{'cpanelevent'}->{'params'}->{'subdomain'}, 'sub' );
+        my $subdomain = $input_params->{'cpanelevent'}->{'params'}->{'domain'};
+        $subdomain =~ s/_/./; # cPanel replaces the first . with a _ We need to switch that for removal purposes
+        my $st = SimpleTemplate::Remove->new( $input_params->{'CPDATA'}->{'USER'}, $subdomain, 'sub' );
+        if( $st->update_config() ){
+            $logger->logger(
+                {
+                    'message' => 'Removed VirtualHost configuration for '. $subdomain,
+                    'level' => 'info',
+                    'backtrace' => 0,
+                    'service' => 'delsubdomain',
+                    'output' => 0
+                }
+            );
+        }
     }
+}
+else{
+    $logger->logger(
+        {
+            'message' => 'XML Data structure not found',
+            'level' => 'warn',
+            'backtrace' => 1,
+            'service' => 'delsubdomain',
+            'output' => 0,
+        }
+    );
 }

@@ -1,0 +1,24 @@
+#!/bin/sh
+
+declare -i VERSION=1
+declare -s PROG_NAME="SimpleTemplate for cPanel & WHM"
+
+echo "Welcome to the $PROG_NAME installer"
+echo
+echo "Checking for conflicts:" 
+
+declare -i FOUND_CONFLICT=0
+
+for hook in "addondomain/addaddondomain" "addondomain/deladdondomain" "park/park" "park/unpark" "subdomain/addsubdomain" "subdomain/delsubdomain"; do
+    if [[ -e /usr/local/cpanel/hooks/$hook ]]; then
+        FOUND_CONFLICT=1
+        echo "Hook script /usr/local/cpanel/hooks/$hook already exists"
+    fi
+done
+
+if [[ $FOUND_CONFLICT eq 1 ]]; then
+    echo "Installation terminating."
+    echo "The current cPanel & WHM hook system does not support multiple hooks in separate files."
+    echo "You must either manually merge the SimpleTemplate hook with the existing hook or"
+    echo "remove the existing hook"
+fi
