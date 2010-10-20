@@ -5,7 +5,8 @@ use warnings;
 
 our $VERSION = 1;
 
-use Cpanel::Logger;
+use lib '/usr/local/cpanel';
+
 use Cpanel::Config::userdata::Load;
 
 ##
