@@ -8,10 +8,9 @@ use Config::IniFiles;
 
 our $VERSION = 1;
 
-use lib '/usr/local/cpanel';
-
 use Template;
 use Cpanel::Config::userdata::Load;
+use Cpanel::Logger;
 
 ##
 # @param user string name of user that owns domain
@@ -42,14 +41,27 @@ sub new{
     tie my %config, 'Config::IniFiles', (-file => '/etc/simpletemplate/simple_template.conf') ;
     $self->{'config'} = \%config;
 
-    $self->{'vhost'} = Cpanel::Config::userdata::Load::load_userdata( $user, $domain );
+    bless $self, $class;
+    return $self;
+}
+
+sub _load_userdata{
+    my ( $self ) = @_;
+
+    $self->{'vhost'} = Cpanel::Config::userdata::Load::load_userdata( $self->{'user'}, $self->{'domain'} );
 
     if( ! keys %{ $self->{'vhost'} } ){
-	die "Unable to load userdata!\n";
+        Cpanel::Logger::logger(
+            {
+                'message' => 'Unable to load userdata. Requested user: '. $self->{'user'}.' domain: '. $self->{'domain'},
+                'level' => 'warn',
+                'output' => 0,
+                'service' => 'simpletemplate',
+            }
+        );
     }
     else{
-	bless $self, $class;
-	return $self;
+        return 1;
     }
 }
 
