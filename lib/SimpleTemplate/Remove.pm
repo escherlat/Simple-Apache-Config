@@ -18,9 +18,11 @@ sub new{
 sub update_config{
     my ( $self ) =  @_;
 
-    if( -f $self->{'config'}->{'service_config'}->{'service_config_directory'}.'/'. $self->{'domain'} ){
+    my $vhost_file = $self->{'domain'};
+
+    if( -f $self->{'config'}->{'service_config'}->{'service_config_directory'}.'/'. $vhost_file ){
         $self->_post_update_processing( 'remove' );
-        unlink( $self->{'config'}->{'service_config'}->{'service_config_directory'}.'/'. $self->{'domain'} );
+        unlink( $self->{'config'}->{'service_config'}->{'service_config_directory'}.'/'. $vhost_file );
         return 1;
     }
     else{
