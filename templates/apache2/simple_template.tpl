@@ -4,9 +4,8 @@ NameVirtualHost [% vhost.ip %]:80
     ServerAlias [% vhost.serveralias %]
     DocumentRoot [% vhost.documentroot %]
     ServerAdmin [% vhost.serveradmin %]
-    [%- FOREACH logstyle IN vhost.customlog %]
-    CustomLog [% logstyle.target %] [% logstyle.format %]
-    [%- END %]
+    CustomLog /usr/local/apache/domlogs/[% vhost.servername %] combined
+    CustomLog /usr/local/apache/domlogs/[% vhost.servername %]-bytes_log "%{%s}t %I .\n%{%s}t %O ."
     ErrorLog /usr/local/apache/domlogs/[% vhost.servername %]-error_log
     [% IF vhost.hascgi %]
     Options ExecCGI
