@@ -22,6 +22,10 @@ sub update_config{
     my %vhost;
     $vhost{'vhost'} = '';
     if( $self->{'domain_type'} eq 'addon' ){
+        # cPanel treats Addon domains odd, due to legacy reasons
+        # The userdata is created for a subdomain associated with the Addon
+        # The Addon is parked on the sub domain
+        # I don't want to follow that so the VHost I generate will be for the Addon without the subdomain business
         eval {
             require SimpleTemplate::AddonDomain;
         };
